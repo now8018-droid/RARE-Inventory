@@ -802,7 +802,7 @@ body.is-dragging * {
 }
 .online-reward.svelte-1ahszso {
     position: relative;
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     margin: 0 auto;
