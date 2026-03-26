@@ -20,3 +20,10 @@ CREATE TABLE IF NOT EXISTS `user_accessories` (
     KEY `idx_user_accessories_identifier` (`identifier`),
     KEY `idx_user_accessories_type` (`type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `vault_inventory` (
+    `vault_name` VARCHAR(100) NOT NULL,
+    `data` LONGTEXT NOT NULL,
+    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`vault_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

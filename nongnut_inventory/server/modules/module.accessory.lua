@@ -1,3 +1,5 @@
+local ESX = exports['es_extended']:getSharedObject()
+
 -- Simple accessories request if needed
 RegisterNetEvent('nongnut_inventory:requestAccessories', function()
     local source = source
