@@ -208,6 +208,30 @@ local function initialized()
         })
     end)
 
+    RegisterNetEvent('esx:updateAccounts', function(updates)
+        for i = 1, #updates do
+            local account = updates[i]
+            itemCount[account.name] = account.money > 0 and account.money or nil
+            if Config.Accounts[account.name] then
+                postMessage('setItemCount', {
+                    name = account.name,
+                    count = account.money
+                })
+            end
+        end
+    end)
+
+    RegisterNetEvent('esx:updateInventory', function(updates)
+        for i = 1, #updates do
+            local update = updates[i]
+            postMessage('setItemCount', {
+                name = update.name,
+                count = update.count
+            })
+            itemCount[update.name] = update.count > 0 and update.count or nil
+        end
+    end)
+
     RegisterNetEvent('esx:addInventoryItem', function(itemName, count, weapon)
         if weapon then return end
         postMessage('setItemCount', {
