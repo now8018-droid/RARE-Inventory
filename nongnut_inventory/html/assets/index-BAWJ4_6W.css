@@ -277,6 +277,7 @@ img.svelte-2sse8m {
     position: relative;
     width: calc(812 * var(--scale-factor));
     height: calc(80 * var(--scale-factor));
+    display: none;
 }
 .header-top.svelte-oiwvqb .bg:where(.svelte-oiwvqb) {
     position: absolute;
@@ -409,6 +410,7 @@ img.svelte-2sse8m {
     position: relative;
     width: calc(1372 * var(--scale-factor));
     height: calc(80 * var(--scale-factor));
+    display: none;
 }
 .header-top.svelte-lbmeib .bg:where(.svelte-lbmeib) {
     position: absolute;
