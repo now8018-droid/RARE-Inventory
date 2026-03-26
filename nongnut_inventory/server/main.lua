@@ -72,10 +72,23 @@ RegisterNetEvent('nongnut_inventory:player:giveVehicleKey', function(targetId, p
 end)
 
 RegisterNetEvent('nongnut_inventory:player:removeAccessory', function(itemName, itemType)
-    -- Logic to remove accessory from player skin if needed, or just remove item
     local source = source
     local xPlayer = ESX.GetPlayerFromId(source)
-    -- Assuming this is just removing the visual accessory
+    if not xPlayer or type(itemName) ~= 'string' or type(itemType) ~= 'string' then
+        return
+    end
+
+    MySQL.update.await([[
+        DELETE FROM user_accessories
+        WHERE identifier = ? AND type = ? AND label = ?
+        LIMIT 1
+    ]], {
+        xPlayer.identifier,
+        itemType,
+        itemName
+    })
+
+    TriggerClientEvent('nongnut_inventory:removeAccessory', source, itemType, itemName)
     TriggerClientEvent('esx_skin:change', source, itemType:gsub('item_', ''), -1)
 end)
 
@@ -186,13 +199,34 @@ RegisterNetEvent('nongnut_inventory:player:takeItem', function(targetSource, ite
 end)
 
 RegisterNetEvent('nongnut_inventory:changeWeapSkin', function(weaponName, skinName)
-     -- Implementation depends on how weapon skins are saved/handled. 
-     -- For now, just a placeholder or simple logic
      local xPlayer = ESX.GetPlayerFromId(source)
-     -- Check if they have the skin item
-     local skinItem = nil -- You need to find which item corresponds to the skinName
-     -- If found and has count > 0
-     -- xPlayer.removeInventoryItem(skinItem, 1) or similar if it's consumable
-     -- Then trigger client to apply tint/component
+     if not xPlayer or type(weaponName) ~= 'string' or type(skinName) ~= 'string' then
+        return
+     end
+
+     local skinItem
+     local removeOnUse = false
+     local weaponSkins = Config.WeaponSkins and Config.WeaponSkins[weaponName]
+     if weaponSkins then
+        for i = 1, #weaponSkins do
+            local skin = weaponSkins[i]
+            if skin.name == skinName then
+                skinItem = skin.item
+                removeOnUse = skin.remove == true
+                break
+            end
+        end
+     end
+
+     if skinItem then
+        local invItem = xPlayer.getInventoryItem(skinItem)
+        if not invItem or invItem.count <= 0 then
+            return
+        end
+        if removeOnUse then
+            xPlayer.removeInventoryItem(skinItem, 1)
+        end
+     end
+
      TriggerClientEvent('nongnut_inventory:setWeaponSkin', source, weaponName, skinName)
 end)
